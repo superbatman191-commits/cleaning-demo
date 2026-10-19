@@ -1,0 +1,256 @@
+/* ==========================================================================
+   Design tokens and base components (copied from design/tokens.css).
+   Fonts: 2 subset WOFF2 files (scripts/subset-fonts.mjs), SIL OFL 1.1.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Unbounded";
+  src: url("../fonts/unbounded.woff2") format("woff2");
+  font-weight: 400 600;
+  font-display: swap;
+}
+/* Capital «Б» of Unbounded looked odd in headings: borrow it from Golos Text (operator pick, TZ20 §13) */
+@font-face {
+  font-family: "Unbounded";
+  src: url("../fonts/golos-text.woff2") format("woff2");
+  font-weight: 400 600;
+  font-display: swap;
+  unicode-range: U+0411;
+  size-adjust: 112%;
+}
+@font-face {
+  font-family: "Golos Text";
+  src: url("../fonts/golos-text.woff2") format("woff2");
+  font-weight: 400 600;
+  font-display: swap;
+}
+:root {
+  /* --- Colour: "ChistoDom pink" (design/v6), from the logo on the master's T-shirt.
+     Variable names are kept from the first design ("sponge and scourer") so the
+     templates and JS did not have to change; read --scour as "accent".
+     Contrast: ink/paper 16:1, muted/paper 7.6:1, muted/rinse 6.9:1, scour/paper 6.4:1,
+     scour/rinse 5.8:1, white/scour 6.8:1, line-strong/white 3.6:1 (UI), sponge/ink 5.6:1. */
+  --paper: #FFF6F9;        /* page background, faint blush */
+  --white: #FFFFFF;        /* raised surfaces: calculator, form, FAQ */
+  --ink: #2A1424;          /* text and dark surfaces (plum black, like the T-shirt) */
+  --muted: #674657;        /* secondary text */
+  --line: #EECBDA;         /* decorative dividers only */
+  --line-strong: #A87A91;  /* control borders (3:1 for UI) */
+  --rinse: #FBE8F0;        /* tint for alternating sections */
+  --scour: #A8216F;        /* accent: buttons, links, ticks (logo magenta) */
+  --scour-deep: #861758;   /* hover / pressed */
+  --sponge: #FF4F93;       /* glove pink: decoration, or text/buttons on --ink only */
+  --sponge-soft: #FADCEA;  /* price chips, highlighted rows */
+  --alert: #A3361F;        /* form errors only */
+  --shadow: 0 1px 2px rgba(42,20,36,.05), 0 18px 40px -22px rgba(168,33,111,.38);
+  /* Roles that differ in the dark theme (18 part 8) */
+  --footer: #2A1424;       /* footer background */
+  --footer-text: #FFF6F9;  /* footer links, headings, brand */
+  --footer-muted: #D9C3CF; /* footer body text (pinkish grey, 10:1 on --footer) */
+  --footer-logo: var(--sponge);
+  --footer-line: rgba(255,255,255,.15);
+  --sponge-btn: var(--white);   /* «Обсудить в Viber» on the calculator */
+  --sponge-link: var(--scour);  /* «Поделиться расчётом» on the calculator */
+  --btn-glow: 0 10px 24px -12px rgba(168,33,111,.7);
+  --backdrop: rgba(42,20,36,.55);
+  --photo-filter: none;
+  --hover-line: var(--scour); /* hover border of every outlined control (TZ21 §14); scour/paper 6.4:1, dark 7.9:1 */
+  color-scheme: light dark;
+
+  /* --- Type ------------------------------------------------------------ */
+  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --font-body: "Golos Text", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Scale (ratio ~1.25, mobile first; display steps grow with viewport) */
+  --fs-sm: 0.875rem;                                  /* 14 — captions, legal */
+  --fs-base: 1.0625rem;                               /* 17 — body */
+  --fs-md: 1.25rem;                                   /* 20 — lead, card titles */
+  --fs-lg: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);    /* 22–28 — H3, price total label */
+  --fs-xl: clamp(1.625rem, 1.2rem + 1.8vw, 2.375rem); /* 26–38 — H2 */
+  --fs-2xl: clamp(1.875rem, 1.25rem + 2.6vw, 3rem);   /* 30–48 — H1 */
+  --fs-price: clamp(2.5rem, 1.8rem + 3vw, 3.75rem);   /* calculator total */
+
+  --lh-body: 1.6;
+  --lh-tight: 1.12;
+  --measure: 64ch;
+
+  /* --- Space (4px base) ---------------------------------------------- */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px;
+  --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1160px;
+
+  /* --- Shape: radius follows hierarchy --------------------------------- */
+  --r-chip: 999px;   /* chips, steppers */
+  --r-ctl: 14px;     /* inputs (buttons are pills) */
+  --r-panel: 24px;   /* calculator, form, cards */
+  --r-photo: 20px;   /* photos */
+  --header-h: 68px;  /* sticky header band; anchors stop below it (TZ20 §8) */
+
+  --focus: 0 0 0 3px var(--paper), 0 0 0 6px var(--scour);
+  --ease: cubic-bezier(.2,.7,.2,1);
+  /* Motion (TZ19): quiet and precise, no bounce */
+  --ease-out: cubic-bezier(.3,0,.2,1);
+  --dur-1: 150ms;   /* hover, colour */
+  --dur-2: 220ms;   /* small changes */
+  --dur-3: 300ms;   /* sheets, transitions */
+  /* Floating islands (header capsule, dock, cookie): frosted glass of the current theme */
+  --island-bg: color-mix(in srgb, var(--white) 80%, transparent);
+  --island-line: color-mix(in srgb, var(--line-strong) 35%, transparent);
+  --island-shadow: 0 10px 30px -8px rgba(76,22,54,.22), 0 2px 6px rgba(76,22,54,.08);
+  /* Top edge of a section sliding over the previous one (TZ20 §7) */
+  /* Over photos and the full-screen view: same in both themes */
+  --on-photo: #fff; --on-photo-shade: rgba(0,0,0,.5); --knob-ink: #A8216F;
+  --lb-backdrop: rgba(10,4,8,.92); --lb-btn: rgba(255,255,255,.12); --lb-btn-hover: rgba(255,255,255,.24);
+}
+
+/* --- Dark theme «Сливовый» (18 part 8, design/design-system.md §10) -------
+   Follows the device unless the visitor picked a theme in the footer (data-theme on <html>,
+   set before first paint by the inline script in base.njk). The two blocks below must stay
+   identical (check-pages.mjs compares them). Contrast (same values): node ../design/dark/contrast.mjs ../design/dark/tokens-dark-a.css
+   ink/paper 15.6:1, muted/paper 9.2:1, scour/paper 7.9:1, white/scour 7.2:1, ink/sponge 6.3:1,
+   line-strong/white 4:1 (UI). --white here is the surface AND the text on the (light) accent. */
+:root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1C1019; --white: #281723; --ink: #F7E8F0; --muted: #CDAFC0;
+    --line: #3E2838; --line-strong: #93708A; --rinse: #231520;
+    --scour: #FF7EB9; --scour-deep: #FFA6CF; --sponge: #9A2366; --sponge-soft: #4B2142; --alert: #FF907A;
+    --shadow: none;
+    --footer: #140B12; --footer-text: #F7E8F0; --footer-muted: #CDAFC0; --footer-logo: var(--scour); --footer-line: #3E2838;
+    --sponge-btn: var(--paper); --sponge-link: var(--ink);
+    --btn-glow: none; --backdrop: rgba(0,0,0,.65); --photo-filter: brightness(.9);
+    --island-shadow: 0 12px 32px -8px rgba(0,0,0,.7), 0 2px 6px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #1C1019; --white: #281723; --ink: #F7E8F0; --muted: #CDAFC0;
+    --line: #3E2838; --line-strong: #93708A; --rinse: #231520;
+    --scour: #FF7EB9; --scour-deep: #FFA6CF; --sponge: #9A2366; --sponge-soft: #4B2142; --alert: #FF907A;
+    --shadow: none;
+    --footer: #140B12; --footer-text: #F7E8F0; --footer-muted: #CDAFC0; --footer-logo: var(--scour); --footer-line: #3E2838;
+    --sponge-btn: var(--paper); --sponge-link: var(--ink);
+    --btn-glow: none; --backdrop: rgba(0,0,0,.65); --photo-filter: brightness(.9);
+    --island-shadow: 0 12px 32px -8px rgba(0,0,0,.7), 0 2px 6px rgba(0,0,0,.4);
+}
+
+/* --- Base --------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + var(--s3)); interpolate-size: allow-keywords; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--fs-base)/var(--lh-body) var(--font-body);
+  font-feature-settings: "tnum" 0;
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--scour); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--scour-deep); text-decoration-thickness: 2px; }
+:focus-visible { outline: none; box-shadow: var(--focus); border-radius: 4px; }
+
+h1, h2, h3 { font-family: var(--font-display); line-height: var(--lh-tight); margin: 0; letter-spacing: -0.02em; text-wrap: balance; overflow-wrap: break-word; hyphens: auto; }
+h1 { font-size: var(--fs-2xl); font-weight: 600; }
+h2 { font-size: var(--fs-xl); font-weight: 600; }
+h3 { font-family: var(--font-body); font-size: var(--fs-md); font-weight: 600; letter-spacing: -0.01em; }
+p { margin: 0 0 var(--s4); max-width: var(--measure); }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* --- Buttons ------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 48px; padding: 0 var(--s5);
+  border-radius: 999px; border: 1.5px solid transparent;
+  font: 600 1rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  transition: background-color .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease), transform .15s var(--ease);
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn--primary { background: var(--scour); color: var(--white); box-shadow: var(--btn-glow); }
+.btn--primary:hover { background: var(--scour-deep); color: var(--white); transform: translateY(-1px); }
+.btn--ghost { background: var(--white); color: var(--ink); border-color: var(--line-strong); }
+.btn--ghost:hover { border-color: var(--hover-line); color: var(--ink); }
+.btn--quiet { background: var(--white); color: var(--ink); border-color: var(--line-strong); }
+.btn--quiet:hover { border-color: var(--hover-line); color: var(--ink); }
+
+/* --- Form controls ------------------------------------------------------- */
+.field { display: grid; gap: var(--s2); }
+.field > label, .legend { font-weight: 600; font-size: 0.95rem; }
+.input, .select, .textarea {
+  width: 100%; min-height: 48px; padding: 10px 14px;
+  font: inherit; color: var(--ink); background: var(--white);
+  border: 1.5px solid var(--line-strong); border-radius: var(--r-ctl);
+}
+.textarea { min-height: 96px; resize: vertical; }
+/* One line that grows with the text up to ~4 lines (TZ20 §10.6); without field-sizing it stays one line and can be dragged taller */
+.textarea--line { min-height: 48px; max-height: calc(4lh + 22px); field-sizing: content; }
+.input:hover, .select:hover, .textarea:hover { border-color: var(--hover-line); }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible { border-color: var(--scour); box-shadow: 0 0 0 3px var(--rinse); }
+/* Field wrapper with a tick once the value is valid (TZ20 §9, TZ21 §2: name, phone, nick; made by site.js) */
+.ok-box { position: relative; display: block; }
+.ok-box .input { padding-right: 44px; }
+.field-ok { position: absolute; right: 14px; top: 50%; width: 20px; height: 20px; margin-top: -10px; display: none; pointer-events: none; }
+.field-ok.is-on { display: block; }
+/* Telegram nick being checked for longer than 600 ms */
+.field-ok.is-wait { display: block; border: 2px solid var(--line-strong); border-top-color: var(--scour); border-radius: 50%; animation: spin .8s linear infinite; }
+.field-ok.is-wait svg { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+/* Height + opacity collapse (TZ19): instant under reduced motion (the global rule drops the height transition) */
+.collapse { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--dur-2) var(--ease-out), opacity var(--dur-2) var(--ease-out); }
+.collapse > * { overflow: hidden; min-height: 0; }
+.collapse.is-shut { grid-template-rows: 0fr; opacity: 0; }
+.field-ok svg { width: 100%; height: 100%; fill: none; stroke: var(--scour); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.hint { font-size: var(--fs-sm); color: var(--muted); }
+.error { font-size: var(--fs-sm); color: var(--alert); font-weight: 600; }
+
+/* Segmented choice (service type, contact channel) */
+.seg { display: flex; flex-wrap: wrap; gap: var(--s2); border: 0; padding: 0; margin: 0; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label {
+  min-height: 44px; display: inline-flex; align-items: center; padding: 0 var(--s4);
+  border: 1.5px solid var(--line-strong); border-radius: var(--r-chip); background: var(--white);
+  font-weight: 600; cursor: pointer; user-select: none;
+}
+.seg label:hover { border-color: var(--hover-line); }
+.seg input:checked + label { background: var(--scour); border-color: var(--scour); color: var(--white); }
+.seg input:focus-visible + label { box-shadow: var(--focus); }
+
+/* Stepper (area, sashes) */
+.stepper { display: inline-grid; grid-template-columns: 48px minmax(64px, 88px) 48px; border: 1.5px solid var(--line-strong); border-radius: var(--r-chip); background: var(--white); overflow: hidden; }
+.stepper button { border: 0; background: transparent; font: 600 1.25rem/1 var(--font-body); color: var(--scour); cursor: pointer; min-height: 46px; }
+.stepper button:hover { background: var(--sponge-soft); }
+.stepper input { border: 0; text-align: center; font: 600 1.0625rem var(--font-body); font-variant-numeric: tabular-nums; width: 100%; background: transparent; color: var(--ink); -moz-appearance: textfield; }
+.stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+/* Checkbox */
+.check { display: flex; gap: var(--s3); align-items: flex-start; min-height: 44px; padding-block: 10px; cursor: pointer; }
+.check input { appearance: none; flex: none; width: 22px; height: 22px; margin: 1px 0 0; border: 1.5px solid var(--line-strong); border-radius: 6px; background: var(--white); display: grid; place-content: center; cursor: pointer; }
+.check input::after { content: ""; width: 12px; height: 7px; border-left: 2.5px solid var(--white); border-bottom: 2.5px solid var(--white); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+.check input:checked { background: var(--scour); border-color: var(--scour); }
+.check input:checked::after { opacity: 1; }
+
+/* Price chip: the "sponge" colour is reserved for money */
+.price-chip { display: inline-block; background: var(--sponge-soft); border-radius: var(--r-chip); padding: 2px 10px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Honest photo placeholder: shows what must be shot, never a stock image */
+.photo-slot {
+  position: relative; border-radius: var(--r-photo); overflow: hidden;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 11px, rgba(168,33,111,.08) 11px 12px),
+    var(--rinse);
+  border: 1.5px dashed var(--line-strong); display: grid; place-items: end start; padding: var(--s4);
+  color: var(--scour-deep); font-size: var(--fs-sm); line-height: 1.4;
+}
+.photo-slot b { display: block; font-weight: 600; }
+
+/* Reduced motion (TZ19 §3.10): only short opacity/colour fades, no movement; sheets appear in place */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-2: 150ms; --dur-3: 150ms; }
+  html { scroll-behavior: auto; }
+  ::backdrop { animation-duration: 150ms !important; }
+  *, *::before, *::after { animation: none !important; transition-property: opacity, color, background-color, border-color, box-shadow !important; }
+}
